@@ -71,9 +71,12 @@ def run():
     bullets = Group()
     createEnemys(screen,enemys, bullets)
     pg.font.init()
-    #font_info = pg.font.SysFont('Ubuntu', 14)
-    font_info = pg.freetype.Font("./fonts/calibri.ttf", 12)
-    font_game_over = pg.freetype.Font("./fonts/calibrib.ttf", 72)
+    #font_info = pg.freetype.Font("./fonts/calibri.ttf", 12)
+    font_info = pg.font.Font("./fonts/calibri.ttf", 14)
+    #font_game_over = pg.freetype.Font("./fonts/calibrib.ttf", 72)
+    #font_game_over = pg.font.Font("./fonts/calibrib.ttf", 72)
+    gameover_surface = pg.font.Font("./fonts/calibrib.ttf", 72).render("GAME OVER", 1, (255, 50, 50))
+
     stars = Stars(screen)
     gameover = False
     gun.record = 0
@@ -110,10 +113,13 @@ def run():
         if gun.score > gun.record:
             gun.record = gun.score
 
-        font_info.render_to(screen, (640, 5), f"Рекорд: {gun.record}, cчет: {gun.score}", (255, 100, 100))
+        score_surface = font_info.render( f"Рекорд: {gun.record}, cчет: {gun.score}", 1, (255, 100, 100))
+        screen.blit(score_surface,(640, 5))
+        #font_info.render_to(screen, (640, 5), f"Рекорд: {gun.record}, cчет: {gun.score}", (255, 100, 100))
 
         if gun.life <= 0:
-            font_game_over.render_to(screen, (210, 360), "GAME OVER", (255, 50, 50))
+            screen.blit(gameover_surface,(210, 360))
+            #font_game_over.render_to(screen, (210, 360), "GAME OVER", (255, 50, 50))
 
         pg.display.flip()
         clock.tick(60)
