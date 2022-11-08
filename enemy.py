@@ -3,15 +3,48 @@ from pygame.sprite import Group
 from random import randint
 from bullet import Bullet
 
+class Images(list):
+    def __init__(self, filenames, interval = 10):
+        super(Images,self).__init__()
+        for fn in filenames:
+            img = pg.image.load(fn).convert_alpha()
+            self.append(img)
+        self.interval = interval
+        self.curintervalindex = 0
+        self.current = 0
+        self.count = len(self)
+
+    def draw(self, screen, rect):
+        if self.count == 0: return
+        screen.blit(self[self.current],rect)
+        if self.count == 1: return
+
+        self.curintervalindex += 1
+        if self.curintervalindex >= self.interval:
+            self.current += 1
+            if self.current >= self.count:
+                self.current = 0
+            self.curintervalindex = 0
+
+    def get_rect(self):
+        if self.count == 0: return None
+        return self[0].get_rect()
+
+    def image(self):
+        if self.count == 0: return None
+        return self[self.current]
+
+
+
 class Enemy(pg.sprite.Sprite):
-    def __init__(self,screen,enemys,bullets):
+    def __init__(self,screen,enemys,bullets,imagefn):
         super(Enemy,self).__init__()
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
         self.enemys = enemys
-        self.image = pg.image.load('./images/enemy1.png')
-        self.orig_image = self.image
-        self.rect = self.image.get_rect()
+        self.images = Images(imagefn)
+        #self.orig_image = self.image
+        self.rect = self.images.get_rect()
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
         self.x, self.y = float(self.rect.x), float(self.rect.y)
@@ -27,8 +60,8 @@ class Enemy(pg.sprite.Sprite):
         self.buletstime = 0
 
     def draw(self):
-        if self.angle == 0:
-            self.screen.blit(self.image,self.rect)
+        self.images.draw(self.screen,self.rect)
+        #self.screen.blit(self.image,self.rect)
 
     def shot(self):
         bul = Bullet(self.screen,self,self.bullets, speed = 7, color = (74,136,210))
@@ -57,11 +90,23 @@ class Enemy(pg.sprite.Sprite):
             self.buletstimeinterval = randint(160,300)
             self.shot()
 
+        #if self.angle_change != 0:
+        #    self.angle += self.angle_change
+        #    self.image = pg.transform.rotozoom(self.orig_image, self.angle, 1)
+        #    self.rect = self.image.get_rect(center=self.rect.center)
+        #    self.angle_change = 0
 
+    @property
+    def image(self):
+        return self.images.image()
 
+    #@x.setter
+    #def x(self, value):
+    #    print("setter of x called")
+    #    self._x = value
 
-        if self.angle_change != 0:
-            self.angle += self.angle_change
-            self.image = pg.transform.rotozoom(self.orig_image, self.angle, 1)
-            self.rect = self.image.get_rect(center=self.rect.center)
-            self.angle_change = 0
+    #@x.deleter
+    #def x(self):
+    #    print("deleter of x called")
+    #    del self._x
+

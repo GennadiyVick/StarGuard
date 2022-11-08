@@ -16,7 +16,7 @@ from music import Music
 
 
 def createEnemys(screen, enemys, bullets):
-    enemy = Enemy(screen,enemys, bullets)
+    enemy = Enemy(screen,enemys, bullets,['./images/enemy1.png'])
     enemy_w = enemy.rect.width+4
     enemy_h = enemy.rect.height-20
     screenrect = screen.get_rect()
@@ -40,7 +40,7 @@ def createEnemys(screen, enemys, bullets):
 
 
     for num in range(8+randint(0,14)):
-        enemy = Enemy(screen,enemys, bullets)
+        enemy = Enemy(screen,enemys, bullets,['./images/enemy1.png'])
         enemy.x = float(start_x + num * enemy_ofs_x)
         enemy.y = float(start_y + num * enemy_ofs_y)
         enemy.step_x = enemy_step_x
@@ -95,7 +95,9 @@ def run():
         gun.draw()
         bullets.update()
         enemys.update()
-        enemys.draw(screen)
+        for enemy in enemys.sprites():
+            enemy.draw()
+        #enemys.draw(screen)
         for bullet in bullets.sprites():
             bullet.draw()
         expl.update()
@@ -128,7 +130,7 @@ def run():
 
 
 
-
+print('Программа StarGuard была написана в следствии изучении библиотеки pygame, автор Роганов.Г.В.')
 run()
 
 pg.quit()

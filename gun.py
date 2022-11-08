@@ -43,7 +43,7 @@ class Gun(pg.sprite.Sprite):
         self.screen_rect = screen.get_rect()
         self.rect.centerx = self.screen_rect.centerx
         self.rect.bottom = self.screen_rect.bottom
-        self.image = GunImage() #pg.image.load('./images/gun1/gun.png')
+        #self.image = GunImage() #pg.image.load('./images/gun1/gun.png')
         self.rect = self.image.image().get_rect()
         self.screen_rect = screen.get_rect()
         self.sounds = {'me': pg.mixer.Sound('./sounds/playerexplossion.wav'), 'ee': pg.mixer.Sound('./sounds/explossion.wav'),'shot': pg.mixer.Sound('./sounds/laser.wav')}
